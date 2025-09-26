@@ -56,6 +56,21 @@ class BalanceGameGUI:
         # 日誌文字框
         self.log_text = None
         
+        # 主角造型相關
+        self.character_canvas = None
+        self.character_face = None
+        self.character_body = None
+        self.character_accessories = []
+        self.current_mood = "normal"
+        self.current_activity = "idle"
+        self.last_action = None
+        
+        # 消息列折疊狀態
+        self.log_collapsed = False
+        self.log_container = None
+        self.log_toggle_button = None
+        self.log_original_height = 150
+        
         # 初始化GUI
         self.setup_gui()
         self.show_main_menu()
@@ -99,9 +114,30 @@ class BalanceGameGUI:
     
     def setup_game_interface(self):
         """設置遊戲主界面"""
-        # 左側：角色狀態
+        # 左側：角色狀態和造型
         left_frame = tk.Frame(self.game_frame, bg='#ecf0f1', relief='raised', bd=2)
         left_frame.pack(side='left', fill='both', expand=True, padx=5, pady=5)
+        
+        # 角色造型區域
+        character_title = tk.Label(
+            left_frame,
+            text="👤 主角造型",
+            font=('微軟正黑體', 16, 'bold'),
+            bg='#ecf0f1',
+            fg='#2c3e50'
+        )
+        character_title.pack(pady=10)
+        
+        # 主角造型畫布
+        self.character_canvas = tk.Canvas(
+            left_frame,
+            width=200,
+            height=200,
+            bg='#ffffff',
+            relief='sunken',
+            bd=2
+        )
+        self.character_canvas.pack(pady=10)
         
         # 角色狀態標題
         stats_title = tk.Label(
@@ -111,7 +147,7 @@ class BalanceGameGUI:
             bg='#ecf0f1',
             fg='#2c3e50'
         )
-        stats_title.pack(pady=10)
+        stats_title.pack(pady=(20, 10))
         
         # 天數和狀態
         self.day_label = tk.Label(
@@ -249,22 +285,40 @@ class BalanceGameGUI:
         )
         self.new_game_button.pack(side='left', padx=5)
         
-        # 日誌區域
+        # 日誌區域標題框架
+        log_title_frame = tk.Frame(right_frame, bg='#ecf0f1')
+        log_title_frame.pack(fill='x', pady=(20, 0))
+        
+        # 日誌標題
         log_title = tk.Label(
-            right_frame,
+            log_title_frame,
             text="📝 遊戲日誌",
             font=('微軟正黑體', 14, 'bold'),
             bg='#ecf0f1',
             fg='#2c3e50'
         )
-        log_title.pack(pady=(20, 5))
+        log_title.pack(side='left')
         
-        # 日誌文字框和滾動條
-        log_container = tk.Frame(right_frame, bg='#ecf0f1')
-        log_container.pack(fill='both', expand=True, padx=10, pady=5)
+        # 折疊/展開按鈕
+        self.log_toggle_button = tk.Button(
+            log_title_frame,
+            text="▼",
+            font=('微軟正黑體', 12, 'bold'),
+            bg='#95a5a6',
+            fg='white',
+            relief='flat',
+            width=3,
+            height=1,
+            command=self.toggle_log
+        )
+        self.log_toggle_button.pack(side='right')
+        
+        # 日誌文字框和滾動條容器
+        self.log_container = tk.Frame(right_frame, bg='#ecf0f1')
+        self.log_container.pack(fill='both', expand=True, padx=10, pady=5)
         
         self.log_text = tk.Text(
-            log_container,
+            self.log_container,
             height=8,
             font=('微軟正黑體', 10),
             bg='white',
@@ -274,7 +328,7 @@ class BalanceGameGUI:
             wrap='word'
         )
         
-        log_scrollbar = ttk.Scrollbar(log_container)
+        log_scrollbar = ttk.Scrollbar(self.log_container)
         log_scrollbar.pack(side='right', fill='y')
         
         self.log_text.pack(side='left', fill='both', expand=True)
@@ -352,6 +406,242 @@ class BalanceGameGUI:
                     effects.append(f"{change}{stat_name}")
         
         return f"{action.description}\n效果: {', '.join(effects)}"
+    
+    def toggle_log(self):
+        """切換日誌區域的折疊狀態"""
+        if self.log_collapsed:
+            # 展開日誌
+            self.log_container.pack(fill='both', expand=True, padx=10, pady=5)
+            self.log_toggle_button.config(text="▼")
+            self.log_collapsed = False
+        else:
+            # 折疊日誌
+            self.log_container.pack_forget()
+            self.log_toggle_button.config(text="▲")
+            self.log_collapsed = True
+    
+    def draw_character(self):
+        """繪製主角造型"""
+        if not self.character_canvas or not self.character:
+            return
+            
+        # 清空畫布
+        self.character_canvas.delete("all")
+        
+        # 畫布尺寸
+        width = 200
+        height = 200
+        center_x = width // 2
+        center_y = height // 2
+        
+        # 根據狀態決定造型
+        self.determine_character_appearance()
+        
+        # 繪製身體（橢圓形）
+        body_color = self.get_body_color()
+        body_size = self.get_body_size()
+        
+        self.character_canvas.create_oval(
+            center_x - body_size, center_y + 20 - body_size//2,
+            center_x + body_size, center_y + 20 + body_size//2,
+            fill=body_color, outline='#2c3e50', width=2
+        )
+        
+        # 繪製頭部
+        head_color = '#ffdbac'  # 膚色
+        self.character_canvas.create_oval(
+            center_x - 25, center_y - 60,
+            center_x + 25, center_y - 10,
+            fill=head_color, outline='#2c3e50', width=2
+        )
+        
+        # 繪製臉部表情
+        self.draw_face(center_x, center_y - 35)
+        
+        # 繪製配件（根據最近行動）
+        self.draw_accessories(center_x, center_y)
+        
+        # 繪製狀態指示器
+        self.draw_status_indicators(center_x, center_y)
+    
+    def determine_character_appearance(self):
+        """根據角色狀態決定外觀"""
+        if not self.character:
+            return
+            
+        # 根據快樂度決定心情
+        happiness = self.character.stats.get('happiness', 50)
+        if happiness >= 70:
+            self.current_mood = "happy"
+        elif happiness >= 40:
+            self.current_mood = "normal"
+        elif happiness >= 20:
+            self.current_mood = "sad"
+        else:
+            self.current_mood = "very_sad"
+        
+        # 根據最後行動決定活動狀態
+        if self.last_action:
+            action_name = self.last_action.name
+            if "運動" in action_name or "慢跑" in action_name:
+                self.current_activity = "exercise"
+            elif "工作" in action_name:
+                self.current_activity = "work"
+            elif "讀書" in action_name or "學習" in action_name:
+                self.current_activity = "study"
+            elif "聚會" in action_name:
+                self.current_activity = "social"
+            elif "休息" in action_name or "冥想" in action_name:
+                self.current_activity = "relax"
+            elif "烹飪" in action_name:
+                self.current_activity = "cooking"
+            elif "購物" in action_name:
+                self.current_activity = "shopping"
+            else:
+                self.current_activity = "idle"
+    
+    def get_body_color(self):
+        """根據健康狀況決定身體顏色"""
+        if not self.character:
+            return '#87ceeb'  # 天藍色
+            
+        health = self.character.stats.get('health', 50)
+        if health >= 80:
+            return '#98fb98'  # 淺綠色，健康
+        elif health >= 60:
+            return '#87ceeb'  # 天藍色，一般
+        elif health >= 40:
+            return '#f0e68c'  # 卡其色，疲累
+        elif health >= 20:
+            return '#dda0dd'  # 紫色，不健康
+        else:
+            return '#f08080'  # 淺紅色，很不健康
+    
+    def get_body_size(self):
+        """根據體重決定身體大小"""
+        if not self.character:
+            return 35
+            
+        weight = self.character.stats.get('weight', 75)
+        # 體重在65-85之間，身體大小在25-45之間
+        size = int(25 + (weight - 65) * 0.5)
+        return max(25, min(45, size))
+    
+    def draw_face(self, x, y):
+        """繪製面部表情"""
+        # 眼睛
+        self.character_canvas.create_oval(x-10, y-8, x-6, y-4, fill='black')
+        self.character_canvas.create_oval(x+6, y-8, x+10, y-4, fill='black')
+        
+        # 根據心情繪製嘴巴
+        if self.current_mood == "happy":
+            # 開心的笑臉
+            self.character_canvas.create_arc(
+                x-8, y+2, x+8, y+12,
+                start=0, extent=180, style='arc', outline='#2c3e50', width=2
+            )
+        elif self.current_mood == "normal":
+            # 普通表情
+            self.character_canvas.create_line(x-6, y+6, x+6, y+6, fill='#2c3e50', width=2)
+        elif self.current_mood == "sad":
+            # 難過表情
+            self.character_canvas.create_arc(
+                x-8, y+2, x+8, y+12,
+                start=180, extent=180, style='arc', outline='#2c3e50', width=2
+            )
+        else:  # very_sad
+            # 很難過表情
+            self.character_canvas.create_arc(
+                x-10, y, x+10, y+15,
+                start=180, extent=180, style='arc', outline='#e74c3c', width=3
+            )
+            # 眼淚
+            self.character_canvas.create_oval(x-12, y+2, x-10, y+8, fill='#3498db')
+            self.character_canvas.create_oval(x+10, y+2, x+12, y+8, fill='#3498db')
+    
+    def draw_accessories(self, center_x, center_y):
+        """根據最近行動繪製配件"""
+        if self.current_activity == "exercise":
+            # 運動頭帶
+            self.character_canvas.create_rectangle(
+                center_x-30, center_y-50, center_x+30, center_y-45,
+                fill='#e74c3c', outline='#c0392b', width=1
+            )
+            # 汗珠
+            self.character_canvas.create_oval(center_x+15, center_y-40, center_x+20, center_y-35, fill='#3498db')
+            
+        elif self.current_activity == "work":
+            # 領帶
+            self.character_canvas.create_polygon(
+                center_x-3, center_y-5, center_x+3, center_y-5,
+                center_x+5, center_y+30, center_x-5, center_y+30,
+                fill='#2c3e50', outline='#34495e'
+            )
+            
+        elif self.current_activity == "study":
+            # 眼鏡
+            self.character_canvas.create_oval(center_x-15, center_y-45, center_x-5, center_y-35, outline='#2c3e50', width=2)
+            self.character_canvas.create_oval(center_x+5, center_y-45, center_x+15, center_y-35, outline='#2c3e50', width=2)
+            self.character_canvas.create_line(center_x-5, center_y-40, center_x+5, center_y-40, fill='#2c3e50', width=2)
+            
+        elif self.current_activity == "social":
+            # 派對帽
+            self.character_canvas.create_polygon(
+                center_x-15, center_y-50, center_x+15, center_y-50,
+                center_x, center_y-70,
+                fill='#f39c12', outline='#e67e22', width=2
+            )
+            self.character_canvas.create_oval(center_x-2, center_y-72, center_x+2, center_y-68, fill='#e74c3c')
+            
+        elif self.current_activity == "cooking":
+            # 廚師帽
+            self.character_canvas.create_rectangle(
+                center_x-20, center_y-65, center_x+20, center_y-50,
+                fill='white', outline='#bdc3c7', width=2
+            )
+            self.character_canvas.create_rectangle(
+                center_x-25, center_y-55, center_x+25, center_y-50,
+                fill='white', outline='#bdc3c7', width=1
+            )
+            
+        elif self.current_activity == "relax":
+            # 睡眠標誌 (Z字)
+            self.character_canvas.create_text(
+                center_x+25, center_y-50, text="Z", font=('微軟正黑體', 16, 'bold'),
+                fill='#95a5a6'
+            )
+            self.character_canvas.create_text(
+                center_x+30, center_y-40, text="Z", font=('微軟正黑體', 12, 'bold'),
+                fill='#bdc3c7'
+            )
+    
+    def draw_status_indicators(self, center_x, center_y):
+        """繪製狀態指示器"""
+        if not self.character:
+            return
+            
+        # 低健康警告
+        if self.character.stats.get('health', 50) < 30:
+            self.character_canvas.create_text(
+                center_x-40, center_y-70, text="🤒", font=('微軟正黑體', 20)
+            )
+            
+        # 低快樂警告
+        if self.character.stats.get('happiness', 50) < 30:
+            self.character_canvas.create_text(
+                center_x+40, center_y-70, text="😢", font=('微軟正黑體', 20)
+            )
+            
+        # 高成就指示
+        if self.character.stats.get('knowledge', 50) > 80:
+            self.character_canvas.create_text(
+                center_x-40, center_y+50, text="🎓", font=('微軟正黑體', 16)
+            )
+            
+        if self.character.stats.get('wealth', 50) > 80:
+            self.character_canvas.create_text(
+                center_x+40, center_y+50, text="💰", font=('微軟正黑體', 16)
+            )
     
     def setup_help_interface(self):
         """設置幫助界面"""
@@ -518,6 +808,9 @@ class BalanceGameGUI:
         # 更新界面
         self.update_display()
         
+        # 初始化造型
+        self.draw_character()
+        
         # 歡迎訊息
         welcome_msg = f"歡迎 {name}！\n目標：從 {self.character.initial_weight}kg 減重到 {self.character.target_weight}kg\n每天選擇一個行動，在{self.character.max_days}天內達成減肥目標！"
         self.add_log(welcome_msg)
@@ -532,6 +825,7 @@ class BalanceGameGUI:
         if self.game_logic.load_game():
             self.character = self.game_logic.character
             self.update_display()
+            self.draw_character()  # 繪製載入後的造型
             self.add_log(f"遊戲已載入！歡迎回來，{self.character.name}！")
             messagebox.showinfo("載入成功", f"歡迎回來，{self.character.name}！")
         else:
@@ -558,6 +852,9 @@ class BalanceGameGUI:
             self.handle_game_end(game_result)
             return
         
+        # 記錄最後行動（用於造型更新）
+        self.last_action = action
+        
         # 執行行動
         self.add_log(f"\n第{self.character.day}天 - {self.character.name} 選擇了: {action.name}")
         self.add_log(f"📝 {action.description}")
@@ -577,7 +874,7 @@ class BalanceGameGUI:
         # 進入下一天
         self.character.day += 1
         
-        # 更新顯示
+        # 更新顯示（包括造型）
         self.update_display()
         
         # 檢查遊戲結束條件
@@ -612,52 +909,56 @@ class BalanceGameGUI:
             self.add_log("📊 指數變化: " + ", ".join(changes))
     
     def process_daily_events(self):
-        """處理每日事件"""
-        events = []
+        """處理每日事件（使用YAML配置的事件系統）"""
+        if not self.game_logic:
+            return
+            
+        # 使用遊戲邏輯的事件處理方法
+        events_occurred = []
         
-        # 根據指數觸發特殊事件
-        if self.character.stats['health'] < 20:
-            events.append("因為健康狀況不佳，今天感到很疲倦...")
-            self.character.update_stats({'happiness': -5})
+        # 處理條件事件
+        conditional_events = self.game_logic.config.get('conditional_events', [])
+        for event_config in conditional_events:
+            condition = event_config.get('condition', {})
+            probability = event_config.get('probability', 0.5)
             
-        if self.character.stats['happiness'] < 20:
-            events.append("心情很低落，做什麼都提不起勁...")
-            self.character.update_stats({'health': -3})
-            
-        if self.character.stats['wealth'] < 20:
-            events.append("錢包空空如也，有點擔心生活費...")
-            self.character.update_stats({'happiness': -3})
-            
-        if self.character.stats['social'] > 80:
-            events.append("朋友們都很關心你的近況，感覺很溫暖！")
-            self.character.update_stats({'happiness': 3})
-            
-        if self.character.stats['knowledge'] > 80:
-            events.append("學到了很多新知識，工作表現更好了！")
-            self.character.update_stats({'wealth': 5})
+            # 檢查條件
+            if (self.game_logic.check_condition(condition, self.character.stats) and 
+                random.random() < probability):
+                
+                event = event_config.get('event', {})
+                event_name = event.get('name', '未知事件')
+                event_desc = event.get('description', '發生了什麼事...')
+                effects = event.get('effects', {})
+                
+                events_occurred.append(event_desc)
+                self.character.update_stats(effects)
         
-        # 隨機事件
-        if random.random() < 0.3:  # 30%機率
-            random_events = [
-                ("下雨了，心情有點憂鬱", {'happiness': -2}),
-                ("收到朋友的鼓勵訊息！", {'happiness': 3, 'social': 2}),
-                ("路上撿到零錢", {'wealth': 2, 'happiness': 1}),
-                ("看到勵志影片", {'happiness': 2, 'knowledge': 1}),
-                ("感冒了一點", {'health': -3}),
-                ("睡得很好", {'health': 3, 'happiness': 2})
-            ]
-            
-            event_text, effects = random.choice(random_events)
-            events.append(event_text)
-            self.character.update_stats(effects)
+        # 處理隨機事件
+        random_events = self.game_logic.config.get('random_events', {})
+        event_probability = random_events.get('probability', 0.3)
+        
+        if random.random() < event_probability:
+            events_list = random_events.get('events', [])
+            if events_list:
+                selected_event = self.game_logic.select_random_event(events_list)
+                if selected_event:
+                    event_name = selected_event.get('name', '未知事件')
+                    event_desc = selected_event.get('description', '發生了什麼事...')
+                    effects = selected_event.get('effects', {})
+                    
+                    events_occurred.append(event_desc)
+                    self.character.update_stats(effects)
         
         # 顯示事件
-        if events:
+        if events_occurred:
             self.add_log("🎲 今日事件:")
-            for event in events:
+            for event in events_occurred:
                 self.add_log(f"   • {event}")
                 if hasattr(self.character, 'events_log'):
                     self.character.events_log.append(f"第{self.character.day}天: {event}")
+            
+            # 事件可能影響造型，稍後會在update_display中重新繪製
     
     def handle_game_end(self, result: str):
         """處理遊戲結束"""
@@ -745,6 +1046,9 @@ class BalanceGameGUI:
         
         # 更新詳細統計
         self.update_detailed_stats()
+        
+        # 更新主角造型
+        self.draw_character()
     
     def update_detailed_stats(self):
         """更新詳細統計頁面"""

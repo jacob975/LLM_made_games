@@ -1,40 +1,213 @@
-# Balance Game - 減肥平衡遊戲 🏃‍♂️
+# 🏃‍♂️ Balance Game - 減肥平衡遊戲
 
-一個有趣的減肥模擬遊戲！扮演一個想要減肥的角色，通過每天的行動選擇來平衡生活的各個方面，最終達成減肥目標。
+[![Python](https://img.shields.io/badge/Python-3.7+-blue.svg)](https://www.python.org/downloads/)
+[![GUI](https://img.shields.io/badge/GUI-tkinter-green.svg)](https://docs.python.org/3/library/tkinter.html)
+[![Config](https://img.shields.io/badge/Config-YAML-orange.svg)](https://yaml.org/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-**🌟 現在提供兩種版本：**
-- **🖥️ GUI版本** - 美觀的圖形界面，豐富的視覺反饋（推薦）
-- **📟 終端版本** - 經典的文字界面，純粹的遊戲體驗
+> 一個有趣的減肥模擬遊戲，通過策略選擇平衡生活各方面，達成健康減肥目標！
+
+## 🌟 亮點特色
+
+### 🎮 現代化圖形界面
+- **🖥️ GUI版本** - 現代化圖形界面，包含動態主角造型系統
+
+### ✨ 創新功能
+- **👤 動態主角造型** - 根據狀態、行動、事件即時變化的角色形象
+- **📋 可折疊界面** - 靈活的界面管理，優化顯示空間
+- **⚙️ YAML配置系統** - 完全可自定義的遊戲內容與隨機事件
+- **🎲 智慧事件系統** - 基於權重和條件的動態事件觸發
 
 ## 🎯 遊戲目標
-- 在100天內從80kg減重到65kg
-- 保持健康和快樂指數不低於20
-- 平衡生活各個方面：體重、健康、快樂、財富、知識、社交
 
-## 📋 遊戲規則
-1. **每天選擇一個行動** - 每個行動會影響不同的指數
-2. **指數範圍** - 各項指數有0-100的範圍，體重有獨立範圍
-3. **隨機事件** - 根據當前指數狀況可能觸發特殊事件
-4. **勝利條件** - 達到目標體重即可獲勝
-5. **失敗條件** - 健康或快樂過低，或者100天內未達成目標
+| 目標 | 數值 | 說明 |
+|------|------|------|
+| **減重目標** | 80kg → 65kg | 在100天內達成 |
+| **健康底線** | ≥ 20 | 低於此值遊戲失敗 |
+| **快樂底線** | ≥ 20 | 低於此值遊戲失敗 |
+| **平衡挑戰** | 6項指數 | 體重、健康、快樂、財富、知識、社交 |
 
-## 🎮 可選行動
-1. **運動** - 增加健康，減少快樂，減重效果佳
-2. **慢跑** - 平衡的運動選擇，輕微社交加成
-3. **讀書** - 增加知識和快樂，但會減少社交
-4. **工作** - 增加財富但損害健康，輕微增重
-5. **聚會** - 大幅提升社交和快樂，但花錢且增重
-6. **休息** - 恢復快樂和健康，但知識會下降
-7. **烹飪** - 健康的選擇，有助減重
-8. **冥想** - 心靈平靜，提升多項指數
-9. **購物** - 花錢買快樂，輕微社交效果
-10. **學習** - 線上課程，大幅提升知識
+## 🚀 快速開始
 
-## 🚀 如何運行
-
-### GUI版本（推薦）🖥️
+### 🖥️ GUI版本
 ```bash
-# 方法1：使用批次檔（Windows）
+# Windows 一鍵啟動
+start_gui.bat
+
+# 或直接運行
+python balance_game_gui.py
+```
+
+### ⚙️ 配置管理
+```bash
+# 配置管理工具
+config_manager.bat
+
+# 或直接運行
+python config_manager.py
+```
+
+## 🎨 主角造型系統
+
+### 動態變化
+- **身體顏色** 反映健康狀況 (綠→藍→黃→紫→紅)
+- **身體大小** 反映體重變化 (25-45像素)
+- **面部表情** 反映快樂程度 (😄→😐→😔→😢)
+
+### 行動配件
+| 行動 | 配件 | 視覺效果 |
+|------|------|----------|
+| 🏃‍♂️ 運動/慢跑 | 紅色頭帶 + 汗珠 | 運動活力 |
+| 👔 工作 | 深藍色領帶 | 專業形象 |
+| 👓 讀書/學習 | 黑色眼鏡 | 學者風範 |
+| 🎉 聚會 | 橙色派對帽 | 社交達人 |
+| 👨‍🍳 烹飪 | 白色廚師帽 | 健康生活 |
+| � 休息/冥想 | 睡眠Z符號 | 放鬆狀態 |
+
+### 狀態指示
+- **🤒 健康警告** (健康 < 30)
+- **😢 心情警告** (快樂 < 30)  
+- **🎓 學習成就** (知識 > 80)
+- **💰 財富成就** (財富 > 80)
+
+## � 遊戲系統
+
+### 📊 六大指數
+| 指數 | 圖示 | 範圍 | 說明 |
+|------|------|------|------|
+| 體重 | 🏋️ | 65-85kg | 主要目標指數 |
+| 健康 | ❤️ | 0-100 | 身體狀況 |
+| 快樂 | � | 0-100 | 心理狀態 |
+| 財富 | 💰 | 0-100 | 經濟狀況 |
+| 知識 | 📚 | 0-100 | 學習成長 |
+| 社交 | 👥 | 0-100 | 人際關係 |
+
+### � 十大行動
+1. **🏃‍♂️ 運動** - 健康++ 快樂-- 體重--
+2. **🚶‍♂️ 慢跑** - 健康+ 社交+ 體重-
+3. **📖 讀書** - 知識++ 快樂+ 社交-
+4. **💼 工作** - 財富++ 健康- 體重+
+5. **🎉 聚會** - 社交++ 快樂++ 財富- 體重+
+6. **😴 休息** - 健康+ 快樂+ 知識-
+7. **👩‍🍳 烹飪** - 健康+ 體重-- 財富-
+8. **🧘‍♂️ 冥想** - 快樂++ 健康+ 知識+
+9. **🛍️ 購物** - 快樂+ 社交+ 財富--
+10. **💻 學習** - 知識+++ 快樂+
+
+### 🎲 隨機事件系統
+- **條件事件** - 基於當前狀態觸發
+- **隨機事件** - 基於權重隨機選擇  
+- **動態機率** - 可配置的觸發機率
+- **多樣效果** - 豐富的狀態影響
+
+## ⚙️ 配置系統
+
+### � 配置文件
+- `config/actions.yaml` - 主配置 (困難模式)
+- `config/actions_hard.yaml` - 困難模式
+- `config/actions_standard.yaml` - 標準模式
+
+### 🛠️ 自定義功能
+- **行動效果** 完全可調整
+- **隨機事件** 支援權重與條件
+- **遊戲設定** 目標、天數可修改
+- **配置切換** 一鍵切換不同模式
+
+## 📚 詳細文檔
+
+| 文檔 | 內容 | 適合對象 |
+|------|------|----------|
+| [🚀 快速開始](GETTING_STARTED.md) | 安裝與基本使用 | 新用戶 |
+| [🎮 遊戲指南](GAMEPLAY_STRATEGY.md) | 玩法策略與技巧 | 所有用戶 |
+| [🖥️ GUI說明](GUI_GUIDE.md) | 圖形界面使用 | GUI用戶 |
+| [👤 造型系統](CHARACTER_AVATAR_SYSTEM.md) | 主角造型詳解 | 進階用戶 |
+| [⚙️ 配置系統](CONFIG_SYSTEM.md) | 配置文件說明 | 自定義用戶 |
+| [🔧 API參考](API_REFERENCE.md) | 程式介面文檔 | 開發者 |
+| [📋 專案總覽](PROJECT_OVERVIEW.md) | 技術架構說明 | 開發者 |
+| [📈 開發報告](DEVELOPMENT_REPORTS.md) | 開發歷程記錄 | 開發者 |
+
+## 🛠️ 技術棧
+
+### 核心技術
+- **Python 3.7+** - 主要開發語言
+- **tkinter** - GUI圖形界面 
+- **PyYAML** - 配置文件解析
+- **JSON** - 存檔系統
+
+### 架構特色
+- **模組化設計** - 易於維護與擴展
+- **配置驅動** - 高度可自定義
+- **跨平台支援** - Windows/Linux/macOS
+- **向後相容** - 保持存檔相容性
+
+## 📁 專案結構
+
+```
+balance_game/
+├── 🎮 主程式
+│   ├── balance_game_gui.py      # GUI版本  
+│   └── config_manager.py        # 配置管理
+├── ⚙️ 配置文件
+│   └── config/
+│       ├── actions.yaml         # 主配置
+│       ├── actions_hard.yaml    # 困難模式
+│       └── actions_standard.yaml # 標準模式
+├── 🚀 啟動腳本
+│   ├── start_gui.bat           # GUI啟動
+│   └── config_manager.bat      # 配置管理
+├── 📚 文檔系統
+│   ├── README.md               # 主文檔
+│   ├── GETTING_STARTED.md      # 快速開始
+│   ├── GAMEPLAY_STRATEGY.md    # 遊戲策略
+│   ├── GUI_GUIDE.md           # GUI說明
+│   ├── CHARACTER_AVATAR_SYSTEM.md # 造型系統
+│   ├── CONFIG_SYSTEM.md        # 配置系統
+│   ├── API_REFERENCE.md        # API參考
+│   ├── PROJECT_OVERVIEW.md     # 專案總覽
+│   └── DEVELOPMENT_REPORTS.md  # 開發報告
+└── 💾 存檔文件
+    └── savegame.json           # 遊戲存檔
+```
+
+## 🎯 成功案例
+
+> **"透過這個遊戲，我學會了平衡生活各方面的重要性！"** - 玩家A
+
+> **"主角造型系統讓遊戲變得超有趣，每天都期待看到變化！"** - 玩家B
+
+> **"配置系統讓我可以創造專屬的遊戲體驗！"** - 玩家C
+
+## 🤝 貢獻指南
+
+歡迎貢獻！請查看以下方式：
+
+1. **🐛 回報問題** - 使用 GitHub Issues
+2. **💡 提出建議** - 分享您的想法
+3. **🔧 程式貢獻** - 提交 Pull Request
+4. **📚 改善文檔** - 協助完善說明
+
+## 📞 支援與聯繫
+
+- **📧 Email**: [Your Email]
+- **🐙 GitHub**: [Repository URL]
+- **📋 Issues**: [Issues URL]
+- **💬 討論區**: [Discussions URL]
+
+## 📜 授權條款
+
+本專案採用 MIT 授權條款 - 詳見 [LICENSE](LICENSE) 文件
+
+---
+
+<div align="center">
+
+**🎉 開始您的減肥平衡之旅吧！ 🎉**
+
+[📥 立即開始](GETTING_STARTED.md) | [🎮 遊戲指南](GAMEPLAY_STRATEGY.md) | [🖥️ GUI說明](GUI_GUIDE.md)
+
+</div>
+
+# 方法1：使用批次檔啟動
 start_gui.bat
 
 # 方法2：直接運行
@@ -42,18 +215,6 @@ python balance_game_gui.py
 
 # 方法3：使用配置的Python環境
 C:/Users/User/Documents/Github/balance_game/.conda/python.exe balance_game_gui.py
-```
-
-### 終端版本 📟
-```bash
-# 方法1：使用批次檔（Windows）  
-start_game.bat
-
-# 方法2：直接運行
-python balance_game.py
-
-# 方法3：使用配置的Python環境
-C:/Users/User/Documents/Github/balance_game/.conda/python.exe balance_game.py
 ```
 
 ### 配置管理工具 ⚙️
@@ -69,6 +230,8 @@ python config_manager.py
 
 ### GUI版本特色 🖥️
 - **美觀的圖形界面** - 使用tkinter創建的現代化界面
+- **👤 主角造型系統** - 動態角色造型反映狀態、行動和事件影響（New!）
+- **📋 可折疊消息列** - 靈活的界面空間管理，一鍵折疊/展開（New!）
 - **分頁設計** - 遊戲、說明、詳細統計三個分頁
 - **即時視覺反饋** - 進度條顯示各項指數，顏色表示狀態
 - **詳細統計分析** - 專門的統計頁面提供深度數據分析
@@ -108,22 +271,23 @@ python config_manager.py
 
 ## 🛠 技術棧
 - **Python 3.x** - 主要開發語言
-- **tkinter** - GUI界面開發（GUI版本）
+- **tkinter** - GUI界面開發
 - **JSON** - 存檔系統
-- **Terminal UI** - 純終端界面，跨平台支持
 
 ## 📁 檔案說明
-- `balance_game.py` - 終端版本主程式
-- `balance_game_gui.py` - GUI版本主程式  
+- `balance_game_gui.py` - GUI版本主程式（包含新的主角造型系統）
 - `config_manager.py` - 配置管理工具
-- `start_game.bat` / `start_gui.bat` / `config_manager.bat` - Windows啟動腳本
+- `start_gui.bat` / `config_manager.bat` - Windows啟動腳本
 - `config/` - 配置文件資料夾
   - `actions.yaml` - 主要遊戲配置
   - `actions_hard.yaml` - 困難模式配置
+  - `actions_standard.yaml` - 標準模式配置
   - `CONFIG_GUIDE.md` - 配置文件詳細說明
 - `README.md` - 主要說明文件
 - `GAMEPLAY.md` - 遊戲截圖與策略指南
 - `GUI_GUIDE.md` - GUI版本詳細使用說明
+- `CHARACTER_AVATAR_GUIDE.md` - 主角造型系統詳細說明（New!）
+- `RANDOM_EVENTS_REPORT.md` - YAML隨機事件系統實施報告（New!）
 - `PROJECT_OVERVIEW.md` - 專案總覽與技術文檔
 
 ## ⚙️ 自定義配置
