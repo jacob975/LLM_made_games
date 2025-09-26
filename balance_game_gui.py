@@ -681,12 +681,12 @@ class BalanceGameGUI:
         
         help_content = """
 🎯 遊戲目標
-在100天內從80kg減重到65kg，同時保持健康和快樂指數不低於20。
+在100天內從80kg減重到65kg，同時保持健康和快樂指數不低於10。
 
 📊 指數說明
 • 體重 🏋️ - 主要目標，需要從80kg減到65kg
-• 健康 ❤️ - 身體狀況，不能低於20（會失敗）
-• 快樂 😊 - 心理狀態，不能低於20（會失敗）
+• 健康 ❤️ - 身體狀況，不能低於10（會失敗）
+• 快樂 😊 - 心理狀態，不能低於10（會失敗）
 • 財富 💰 - 經濟狀況，影響生活品質
 • 知識 📚 - 學習成長，間接影響其他方面
 • 社交 👥 - 人際關係，影響心情
@@ -742,8 +742,8 @@ class BalanceGameGUI:
 • 體重達到65kg或以下
 
 失敗條件：
-• 健康指數降到20以下
-• 快樂指數降到20以下
+• 健康指數降到10以下
+• 快樂指數降到10以下
 • 100天內未達成減肥目標
 
 💡 策略建議
@@ -1054,12 +1054,22 @@ class BalanceGameGUI:
             self.progress_bars[stat_key]['value'] = value
             
             # 根據數值改變進度條顏色
-            if value <= 20:
-                self.progress_bars[stat_key].configure(style='Red.Horizontal.TProgressbar')
-            elif value <= 50:
-                self.progress_bars[stat_key].configure(style='Yellow.Horizontal.TProgressbar')
+            # 對健康和快樂使用更精確的風險評估
+            if stat_key in ['health', 'happiness']:
+                if value <= 10:  # 極危險，即將失敗
+                    self.progress_bars[stat_key].configure(style='Red.Horizontal.TProgressbar')
+                elif value <= 20:  # 危險，需要注意
+                    self.progress_bars[stat_key].configure(style='Yellow.Horizontal.TProgressbar')
+                else:  # 安全
+                    self.progress_bars[stat_key].configure(style='Green.Horizontal.TProgressbar')
             else:
-                self.progress_bars[stat_key].configure(style='Green.Horizontal.TProgressbar')
+                # 其他統計使用原來的邏輯
+                if value <= 20:
+                    self.progress_bars[stat_key].configure(style='Red.Horizontal.TProgressbar')
+                elif value <= 50:
+                    self.progress_bars[stat_key].configure(style='Yellow.Horizontal.TProgressbar')
+                else:
+                    self.progress_bars[stat_key].configure(style='Green.Horizontal.TProgressbar')
         
         # 更新詳細統計
         self.update_detailed_stats()
@@ -1100,8 +1110,8 @@ class BalanceGameGUI:
    平均日減: {weight_lost / max(1, self.character.day - 1):.2f}kg/天
 
 📊 各項指數詳情
-   ❤️  健康: {self.character.stats['health']:.0f}/100 {'⚠️ 危險!' if self.character.stats['health'] <= 20 else '✅ 安全' if self.character.stats['health'] >= 60 else '⚡ 注意'}
-   😊 快樂: {self.character.stats['happiness']:.0f}/100 {'⚠️ 危險!' if self.character.stats['happiness'] <= 20 else '✅ 良好' if self.character.stats['happiness'] >= 60 else '⚡ 普通'}
+   ❤️  健康: {self.character.stats['health']:.0f}/100 {'🚨 危險!' if self.character.stats['health'] <= 10 else '⚠️ 注意!' if self.character.stats['health'] <= 20 else '✅ 安全' if self.character.stats['health'] >= 60 else '⚡ 一般'}
+   😊 快樂: {self.character.stats['happiness']:.0f}/100 {'🚨 危險!' if self.character.stats['happiness'] <= 10 else '⚠️ 注意!' if self.character.stats['happiness'] <= 20 else '✅ 良好' if self.character.stats['happiness'] >= 60 else '⚡ 普通'}
    💰 財富: {self.character.stats['wealth']:.0f}/100 {'💸 貧困' if self.character.stats['wealth'] <= 20 else '💰 富裕' if self.character.stats['wealth'] >= 80 else '💵 普通'}
    📚 知識: {self.character.stats['knowledge']:.0f}/100 {'📖 博學' if self.character.stats['knowledge'] >= 80 else '📚 學習中' if self.character.stats['knowledge'] >= 40 else '🤔 需加油'}
    👥 社交: {self.character.stats['social']:.0f}/100 {'🎉 人氣王' if self.character.stats['social'] >= 80 else '👥 正常' if self.character.stats['social'] >= 40 else '😔 孤獨'}
@@ -1111,8 +1121,8 @@ class BalanceGameGUI:
    建議策略: {'🎉 已達成目標！' if self.character.stats['weight'] <= self.character.target_weight else '🏃‍♂️ 需要更多運動' if weight_lost < target_loss * 0.5 else '💪 繼續保持！'}
 
 🎲 風險評估
-   健康風險: {'🚨 極高' if self.character.stats['health'] <= 20 else '⚠️ 高' if self.character.stats['health'] <= 40 else '✅ 低'}
-   心理風險: {'🚨 極高' if self.character.stats['happiness'] <= 20 else '⚠️ 高' if self.character.stats['happiness'] <= 40 else '✅ 低'}
+   健康風險: {'🚨 極高' if self.character.stats['health'] <= 10 else '⚠️ 高' if self.character.stats['health'] <= 20 else '⚡ 中' if self.character.stats['health'] <= 40 else '✅ 低'}
+   心理風險: {'🚨 極高' if self.character.stats['happiness'] <= 10 else '⚠️ 高' if self.character.stats['happiness'] <= 20 else '⚡ 中' if self.character.stats['happiness'] <= 40 else '✅ 低'}
    時間風險: {'🚨 極高' if days_remaining <= 10 and progress < 80 else '⚠️ 高' if days_remaining <= 30 and progress < 50 else '✅ 低'}
 
 💡 智慧建議
@@ -1120,9 +1130,13 @@ class BalanceGameGUI:
         
         # 添加建議
         suggestions = []
-        if self.character.stats['health'] <= 30:
+        if self.character.stats['health'] <= 15:
+            suggestions.append("   🚨 健康狀況極度危險！必須立即休息、運動或冥想，否則遊戲失敗")
+        elif self.character.stats['health'] <= 30:
             suggestions.append("   🏥 健康狀況不佳，建議多休息、運動或冥想")
-        if self.character.stats['happiness'] <= 30:
+        if self.character.stats['happiness'] <= 15:
+            suggestions.append("   🚨 心情極度低落！必須立即聚會、休息或購物，否則遊戲失敗")
+        elif self.character.stats['happiness'] <= 30:
             suggestions.append("   😊 心情低落，建議聚會、休息或購物")
         if self.character.stats['weight'] > self.character.target_weight + 5:
             suggestions.append("   🏃‍♂️ 體重超標較多，建議加強運動和烹飪")

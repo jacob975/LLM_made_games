@@ -117,10 +117,10 @@ class Character:
         if self.stats['weight'] <= self.target_weight:
             return "win"
         
-        # 失敗條件使用配置的閾值
-        if self.stats['health'] <= self.health_threshold:
+        # 失敗條件使用配置的閾值 - 低於閾值時失敗
+        if self.stats['health'] < self.health_threshold:
             return "lose_health"
-        if self.stats['happiness'] <= self.happiness_threshold:
+        if self.stats['happiness'] < self.happiness_threshold:
             return "lose_depression"
         if self.day > self.max_days:  # 使用配置的最大天數
             return "lose_time"
