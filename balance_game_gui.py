@@ -114,66 +114,82 @@ class BalanceGameGUI:
     
     def setup_game_interface(self):
         """設置遊戲主界面"""
-        # 左側：角色狀態和造型
+        # 左側：角色狀態和造型 - 保持在512px內但允許內容適應
         left_frame = tk.Frame(self.game_frame, bg='#ecf0f1', relief='raised', bd=2)
-        left_frame.pack(side='left', fill='both', expand=True, padx=5, pady=5)
+        left_frame.pack(side='left', fill='y', padx=5, pady=5)
+        
+        # 創建可滾動的內容容器
+        left_canvas = tk.Canvas(left_frame, bg='#ecf0f1', height=512, width=250)
+        left_scrollbar = ttk.Scrollbar(left_frame, orient="vertical", command=left_canvas.yview)
+        left_content_frame = tk.Frame(left_canvas, bg='#ecf0f1')
+        
+        left_content_frame.bind(
+            "<Configure>",
+            lambda e: left_canvas.configure(scrollregion=left_canvas.bbox("all"))
+        )
+        
+        left_canvas.create_window((0, 0), window=left_content_frame, anchor="nw")
+        left_canvas.configure(yscrollcommand=left_scrollbar.set)
+        
+        left_canvas.pack(side="left", fill="both", expand=True)
+        left_scrollbar.pack(side="right", fill="y")
         
         # 角色造型區域
         character_title = tk.Label(
-            left_frame,
+            left_content_frame,
             text="👤 主角造型",
-            font=('微軟正黑體', 16, 'bold'),
+            font=('微軟正黑體', 12, 'bold'),
             bg='#ecf0f1',
             fg='#2c3e50'
         )
-        character_title.pack(pady=10)
+        character_title.pack(pady=5)
         
-        # 主角造型畫布
+        # 主角造型畫布 - 縮小以適應512高度限制
         self.character_canvas = tk.Canvas(
-            left_frame,
-            width=200,
-            height=200,
+            left_content_frame,
+            width=150,
+            height=150,
             bg='#ffffff',
             relief='sunken',
             bd=2
         )
-        self.character_canvas.pack(pady=10)
+        self.character_canvas.pack(pady=5)
         
         # 角色狀態標題
         stats_title = tk.Label(
-            left_frame,
+            left_content_frame,
             text="📊 角色狀態",
-            font=('微軟正黑體', 16, 'bold'),
+            font=('微軟正黑體', 12, 'bold'),
             bg='#ecf0f1',
             fg='#2c3e50'
         )
-        stats_title.pack(pady=(20, 10))
+        stats_title.pack(pady=(10, 5))
         
         # 天數和狀態
         self.day_label = tk.Label(
-            left_frame,
+            left_content_frame,
             text="第 1 天",
-            font=('微軟正黑體', 14, 'bold'),
+            font=('微軟正黑體', 12, 'bold'),
             bg='#ecf0f1',
             fg='#e74c3c'
         )
-        self.day_label.pack(pady=5)
+        self.day_label.pack(pady=3)
         
         self.status_label = tk.Label(
-            left_frame,
+            left_content_frame,
             text="準備開始遊戲...",
-            font=('微軟正黑體', 10),
+            font=('微軟正黑體', 9),
             bg='#ecf0f1',
             fg='#7f8c8d',
-            wraplength=250
+            wraplength=200
         )
-        self.status_label.pack(pady=5)
+        self.status_label.pack(pady=3)
         
-        # 統計數據框架
-        stats_container = tk.Frame(left_frame, bg='#ecf0f1')
-        stats_container.pack(fill='both', expand=True, padx=10, pady=10)
+        # 統計數據框架 - 使用剩餘空間
+        stats_container = tk.Frame(left_content_frame, bg='#ecf0f1')
+        stats_container.pack(fill='both', expand=True, padx=8, pady=5)
         
-        # 創建各項統計的顯示
+        # 創建各項統計的顯示 - 更緊湊的佈局
         stat_configs = [
             ('weight', '🏋️ 體重', 'kg'),
             ('health', '❤️ 健康', '/100'),
@@ -185,40 +201,39 @@ class BalanceGameGUI:
         
         for stat_key, stat_name, unit in stat_configs:
             stat_frame = tk.Frame(stats_container, bg='#ecf0f1')
-            stat_frame.pack(fill='x', pady=8)
+            stat_frame.pack(fill='x', pady=3)  # 減少間距
             
-            # 統計名稱
+            # 統計名稱和數值在同一行
+            top_row = tk.Frame(stat_frame, bg='#ecf0f1')
+            top_row.pack(fill='x')
+            
             name_label = tk.Label(
-                stat_frame,
+                top_row,
                 text=stat_name,
-                font=('微軟正黑體', 12, 'bold'),
+                font=('微軟正黑體', 10, 'bold'),  # 縮小字體
                 bg='#ecf0f1',
                 fg='#2c3e50'
             )
-            name_label.pack(anchor='w')
-            
-            # 數值顯示
-            value_frame = tk.Frame(stat_frame, bg='#ecf0f1')
-            value_frame.pack(fill='x', pady=2)
+            name_label.pack(side='left')
             
             self.stats_labels[stat_key] = tk.Label(
-                value_frame,
+                top_row,
                 text=f"0{unit}",
-                font=('微軟正黑體', 11),
+                font=('微軟正黑體', 10),  # 縮小字體
                 bg='#ecf0f1',
                 fg='#34495e'
             )
-            self.stats_labels[stat_key].pack(side='left')
+            self.stats_labels[stat_key].pack(side='right')
             
-            # 進度條（除了體重）
+            # 進度條（除了體重）- 更小尺寸
             if stat_key != 'weight':
                 progress = ttk.Progressbar(
-                    value_frame,
+                    stat_frame,
                     mode='determinate',
-                    length=150,
+                    length=180,  # 縮短進度條
                     style='Custom.Horizontal.TProgressbar'
                 )
-                progress.pack(side='right')
+                progress.pack(fill='x', pady=1)  # 減少上下間距
                 self.progress_bars[stat_key] = progress
         
         # 右側：行動選擇和日誌
@@ -428,35 +443,37 @@ class BalanceGameGUI:
         # 清空畫布
         self.character_canvas.delete("all")
         
-        # 畫布尺寸
-        width = 200
-        height = 200
+        # 畫布尺寸 - 調整為150x150
+        width = 150
+        height = 150
         center_x = width // 2
         center_y = height // 2
         
         # 根據狀態決定造型
         self.determine_character_appearance()
         
-        # 繪製身體（橢圓形）
+        # 繪製身體（橢圓形）- 調整比例
         body_color = self.get_body_color()
         body_size = self.get_body_size()
+        # 縮放身體大小以適應較小畫布
+        scaled_body_size = int(body_size * 0.75)
         
         self.character_canvas.create_oval(
-            center_x - body_size, center_y + 20 - body_size//2,
-            center_x + body_size, center_y + 20 + body_size//2,
+            center_x - scaled_body_size, center_y + 15 - scaled_body_size//2,
+            center_x + scaled_body_size, center_y + 15 + scaled_body_size//2,
             fill=body_color, outline='#2c3e50', width=2
         )
         
-        # 繪製頭部
+        # 繪製頭部 - 調整比例
         head_color = '#ffdbac'  # 膚色
         self.character_canvas.create_oval(
-            center_x - 25, center_y - 60,
-            center_x + 25, center_y - 10,
+            center_x - 20, center_y - 45,
+            center_x + 20, center_y - 5,
             fill=head_color, outline='#2c3e50', width=2
         )
         
         # 繪製臉部表情
-        self.draw_face(center_x, center_y - 35)
+        self.draw_face(center_x, center_y - 25)
         
         # 繪製配件（根據最近行動）
         self.draw_accessories(center_x, center_y)
@@ -520,98 +537,98 @@ class BalanceGameGUI:
     def get_body_size(self):
         """根據體重決定身體大小"""
         if not self.character:
-            return 35
+            return 26  # 調整基礎大小適應150x150畫布
             
         weight = self.character.stats.get('weight', 75)
-        # 體重在65-85之間，身體大小在25-45之間
-        size = int(25 + (weight - 65) * 0.5)
-        return max(25, min(45, size))
+        # 體重在65-85之間，身體大小在20-35之間（縮放適應小畫布）
+        size = int(20 + (weight - 65) * 0.375)
+        return max(20, min(35, size))
     
     def draw_face(self, x, y):
         """繪製面部表情"""
-        # 眼睛
-        self.character_canvas.create_oval(x-10, y-8, x-6, y-4, fill='black')
-        self.character_canvas.create_oval(x+6, y-8, x+10, y-4, fill='black')
+        # 眼睛 - 縮小比例
+        self.character_canvas.create_oval(x-8, y-6, x-4, y-2, fill='black')
+        self.character_canvas.create_oval(x+4, y-6, x+8, y-2, fill='black')
         
-        # 根據心情繪製嘴巴
+        # 根據心情繪製嘴巴 - 調整比例
         if self.current_mood == "happy":
             # 開心的笑臉
             self.character_canvas.create_arc(
-                x-8, y+2, x+8, y+12,
+                x-6, y+2, x+6, y+10,
                 start=0, extent=180, style='arc', outline='#2c3e50', width=2
             )
         elif self.current_mood == "normal":
             # 普通表情
-            self.character_canvas.create_line(x-6, y+6, x+6, y+6, fill='#2c3e50', width=2)
+            self.character_canvas.create_line(x-4, y+4, x+4, y+4, fill='#2c3e50', width=2)
         elif self.current_mood == "sad":
             # 難過表情
             self.character_canvas.create_arc(
-                x-8, y+2, x+8, y+12,
+                x-6, y+2, x+6, y+10,
                 start=180, extent=180, style='arc', outline='#2c3e50', width=2
             )
         else:  # very_sad
             # 很難過表情
             self.character_canvas.create_arc(
-                x-10, y, x+10, y+15,
+                x-8, y, x+8, y+12,
                 start=180, extent=180, style='arc', outline='#e74c3c', width=3
             )
             # 眼淚
-            self.character_canvas.create_oval(x-12, y+2, x-10, y+8, fill='#3498db')
-            self.character_canvas.create_oval(x+10, y+2, x+12, y+8, fill='#3498db')
+            self.character_canvas.create_oval(x-10, y+2, x-8, y+6, fill='#3498db')
+            self.character_canvas.create_oval(x+8, y+2, x+10, y+6, fill='#3498db')
     
     def draw_accessories(self, center_x, center_y):
         """根據最近行動繪製配件"""
         if self.current_activity == "exercise":
-            # 運動頭帶
+            # 運動頭帶 - 調整比例
             self.character_canvas.create_rectangle(
-                center_x-30, center_y-50, center_x+30, center_y-45,
+                center_x-25, center_y-40, center_x+25, center_y-36,
                 fill='#e74c3c', outline='#c0392b', width=1
             )
             # 汗珠
-            self.character_canvas.create_oval(center_x+15, center_y-40, center_x+20, center_y-35, fill='#3498db')
+            self.character_canvas.create_oval(center_x+12, center_y-32, center_x+16, center_y-28, fill='#3498db')
             
         elif self.current_activity == "work":
-            # 領帶
+            # 領帶 - 調整比例
             self.character_canvas.create_polygon(
-                center_x-3, center_y-5, center_x+3, center_y-5,
-                center_x+5, center_y+30, center_x-5, center_y+30,
+                center_x-2, center_y-2, center_x+2, center_y-2,
+                center_x+4, center_y+22, center_x-4, center_y+22,
                 fill='#2c3e50', outline='#34495e'
             )
             
         elif self.current_activity == "study":
-            # 眼鏡
-            self.character_canvas.create_oval(center_x-15, center_y-45, center_x-5, center_y-35, outline='#2c3e50', width=2)
-            self.character_canvas.create_oval(center_x+5, center_y-45, center_x+15, center_y-35, outline='#2c3e50', width=2)
-            self.character_canvas.create_line(center_x-5, center_y-40, center_x+5, center_y-40, fill='#2c3e50', width=2)
+            # 眼鏡 - 調整比例
+            self.character_canvas.create_oval(center_x-12, center_y-35, center_x-4, center_y-27, outline='#2c3e50', width=2)
+            self.character_canvas.create_oval(center_x+4, center_y-35, center_x+12, center_y-27, outline='#2c3e50', width=2)
+            self.character_canvas.create_line(center_x-4, center_y-31, center_x+4, center_y-31, fill='#2c3e50', width=2)
             
         elif self.current_activity == "social":
-            # 派對帽
+            # 派對帽 - 調整比例
             self.character_canvas.create_polygon(
-                center_x-15, center_y-50, center_x+15, center_y-50,
-                center_x, center_y-70,
+                center_x-12, center_y-40, center_x+12, center_y-40,
+                center_x, center_y-55,
                 fill='#f39c12', outline='#e67e22', width=2
             )
-            self.character_canvas.create_oval(center_x-2, center_y-72, center_x+2, center_y-68, fill='#e74c3c')
+            self.character_canvas.create_oval(center_x-2, center_y-57, center_x+2, center_y-53, fill='#e74c3c')
             
         elif self.current_activity == "cooking":
-            # 廚師帽
+            # 廚師帽 - 調整比例
             self.character_canvas.create_rectangle(
-                center_x-20, center_y-65, center_x+20, center_y-50,
+                center_x-16, center_y-52, center_x+16, center_y-40,
                 fill='white', outline='#bdc3c7', width=2
             )
             self.character_canvas.create_rectangle(
-                center_x-25, center_y-55, center_x+25, center_y-50,
+                center_x-20, center_y-44, center_x+20, center_y-40,
                 fill='white', outline='#bdc3c7', width=1
             )
             
         elif self.current_activity == "relax":
-            # 睡眠標誌 (Z字)
+            # 睡眠標誌 (Z字) - 調整位置
             self.character_canvas.create_text(
-                center_x+25, center_y-50, text="Z", font=('微軟正黑體', 16, 'bold'),
+                center_x+20, center_y-40, text="Z", font=('微軟正黑體', 12, 'bold'),
                 fill='#95a5a6'
             )
             self.character_canvas.create_text(
-                center_x+30, center_y-40, text="Z", font=('微軟正黑體', 12, 'bold'),
+                center_x+24, center_y-32, text="Z", font=('微軟正黑體', 10, 'bold'),
                 fill='#bdc3c7'
             )
     
@@ -620,27 +637,27 @@ class BalanceGameGUI:
         if not self.character:
             return
             
-        # 低健康警告
+        # 低健康警告 - 調整位置
         if self.character.stats.get('health', 50) < 30:
             self.character_canvas.create_text(
-                center_x-40, center_y-70, text="🤒", font=('微軟正黑體', 20)
+                center_x-30, center_y-55, text="🤒", font=('微軟正黑體', 16)
             )
             
-        # 低快樂警告
+        # 低快樂警告 - 調整位置
         if self.character.stats.get('happiness', 50) < 30:
             self.character_canvas.create_text(
-                center_x+40, center_y-70, text="😢", font=('微軟正黑體', 20)
+                center_x+30, center_y-55, text="😢", font=('微軟正黑體', 16)
             )
             
-        # 高成就指示
+        # 高成就指示 - 調整位置
         if self.character.stats.get('knowledge', 50) > 80:
             self.character_canvas.create_text(
-                center_x-40, center_y+50, text="🎓", font=('微軟正黑體', 16)
+                center_x-30, center_y+40, text="🎓", font=('微軟正黑體', 14)
             )
             
         if self.character.stats.get('wealth', 50) > 80:
             self.character_canvas.create_text(
-                center_x+40, center_y+50, text="💰", font=('微軟正黑體', 16)
+                center_x+30, center_y+40, text="💰", font=('微軟正黑體', 14)
             )
     
     def setup_help_interface(self):
@@ -846,12 +863,6 @@ class BalanceGameGUI:
             messagebox.showwarning("錯誤", "請先開始遊戲！")
             return
         
-        # 檢查遊戲結束條件
-        game_result = self.character.check_win_condition()
-        if game_result:
-            self.handle_game_end(game_result)
-            return
-        
         # 記錄最後行動（用於造型更新）
         self.last_action = action
         
@@ -871,13 +882,19 @@ class BalanceGameGUI:
         # 處理每日事件
         self.process_daily_events()
         
+        # 檢查遊戲結束條件（在天數增加之前檢查，以確保勝利條件優先於時間限制）
+        game_result = self.character.check_win_condition()
+        if game_result:
+            self.handle_game_end(game_result)
+            return
+        
         # 進入下一天
         self.character.day += 1
         
         # 更新顯示（包括造型）
         self.update_display()
         
-        # 檢查遊戲結束條件
+        # 再次檢查遊戲結束條件（主要是檢查天數限制）
         game_result = self.character.check_win_condition()
         if game_result:
             self.handle_game_end(game_result)
