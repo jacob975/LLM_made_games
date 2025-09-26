@@ -56,6 +56,15 @@ python balance_game.py
 C:/Users/User/Documents/Github/balance_game/.conda/python.exe balance_game.py
 ```
 
+### 配置管理工具 ⚙️
+```bash
+# 管理遊戲配置文件
+config_manager.bat
+
+# 或直接運行
+python config_manager.py
+```
+
 ## 🎨 遊戲特色
 
 ### GUI版本特色 🖥️
@@ -67,10 +76,18 @@ C:/Users/User/Documents/Github/balance_game/.conda/python.exe balance_game.py
 - **一鍵操作** - 點擊按鈕即可執行所有操作
 - **智慧建議系統** - 根據當前狀態提供策略建議
 
+### 配置系統特色 ⚙️
+- **YAML配置文件** - 所有行動和設定都可自定義
+- **隨機事件系統** - 可配置的隨機事件和條件事件
+- **多套配置方案** - 預設、困難等多種遊戲模式
+- **配置管理工具** - 方便切換和管理不同配置
+- **完全可自定義** - 玩家可創建專屬的遊戲體驗
+- **向後相容** - 即使沒有配置文件也能正常運行
+
 ### 通用特色 ⭐
 - **豐富的視覺效果** - 使用表情符號和進度條
 - **存檔系統** - 可以保存和載入遊戲進度
-- **隨機事件** - 增加遊戲的不可預測性和趣味性
+- **智慧隨機事件** - 基於權重的隨機事件系統，支援條件觸發
 - **平衡挑戰** - 需要策略性地平衡各項指數
 - **中文界面** - 完全的中文遊戲體驗
 
@@ -98,8 +115,26 @@ C:/Users/User/Documents/Github/balance_game/.conda/python.exe balance_game.py
 ## 📁 檔案說明
 - `balance_game.py` - 終端版本主程式
 - `balance_game_gui.py` - GUI版本主程式  
-- `start_game.bat` / `start_gui.bat` - Windows啟動腳本
+- `config_manager.py` - 配置管理工具
+- `start_game.bat` / `start_gui.bat` / `config_manager.bat` - Windows啟動腳本
+- `config/` - 配置文件資料夾
+  - `actions.yaml` - 主要遊戲配置
+  - `actions_hard.yaml` - 困難模式配置
+  - `CONFIG_GUIDE.md` - 配置文件詳細說明
 - `README.md` - 主要說明文件
 - `GAMEPLAY.md` - 遊戲截圖與策略指南
 - `GUI_GUIDE.md` - GUI版本詳細使用說明
 - `PROJECT_OVERVIEW.md` - 專案總覽與技術文檔
+
+## ⚙️ 自定義配置
+
+### 快速開始
+1. 運行 `config_manager.bat` 管理配置
+2. 編輯 `config/actions.yaml` 自定義遊戲
+3. 查看 `config/CONFIG_GUIDE.md` 了解詳細說明
+
+### 配置功能
+- **自定義行動** - 添加、修改或移除遊戲行動
+- **調整數值** - 修改各種效果和平衡性
+- **遊戲難度** - 調整初始值、目標和時限
+- **多套方案** - 創建不同主題的遊戲體驗

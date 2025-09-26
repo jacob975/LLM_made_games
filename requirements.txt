@@ -1,12 +1,15 @@
 # Balance Game - Requirements
-# This game only uses Python standard library modules
-# No external dependencies required
+
+# External dependencies:
+PyYAML>=6.0
 
 # Standard library modules used:
 # - json (for save/load functionality)
 # - os (for file operations)
 # - random (for random events)
 # - typing (for type hints)
+# - pathlib (for path handling)
+# - tkinter (for GUI version)
 
 # Python version requirement:
 # Python >= 3.6 (for f-strings and type hints)

@@ -1,0 +1,255 @@
+# 減肥平衡遊戲 - 高級挑戰配置
+# 這是一個更具挑戰性的配置示例
+
+# 行動列表 - 高級挑戰版
+actions:
+  - name: "高強度運動"
+    description: "HIIT高強度間歇訓練"
+    effects:
+      weight: -0.8      # 更好的減重效果
+      health: 10        # 更高的健康增益
+      happiness: -5     # 更累，快樂下降更多
+    energy_cost: 20
+    
+  - name: "瑜伽"
+    description: "練習哈他瑜伽1小時"
+    effects:
+      weight: -0.2
+      health: 6
+      happiness: 4
+      knowledge: 1      # 身心靈提升
+    energy_cost: 8
+    
+  - name: "營養學習"
+    description: "學習營養知識和健康飲食"
+    effects:
+      knowledge: 10
+      health: 2
+      happiness: 2
+    energy_cost: 6
+    
+  - name: "加班工作"
+    description: "為了賺更多錢而加班"
+    effects:
+      wealth: 12        # 更多收入
+      health: -6        # 更大健康損害
+      happiness: -4     # 更累更不開心
+      weight: 0.3       # 久坐+外食
+    energy_cost: 18
+    
+  - name: "社交聚餐"
+    description: "和朋友一起享用大餐"
+    effects:
+      social: 10
+      happiness: 8
+      wealth: -5
+      weight: 0.5       # 大餐增重更多
+    energy_cost: 5
+    
+  - name: "深度休息"
+    description: "完全放鬆，睡個好覺"
+    effects:
+      happiness: 8
+      health: 5
+      knowledge: -2
+    energy_cost: 0
+    
+  - name: "健康烹飪"
+    description: "精心準備低卡營養餐"
+    effects:
+      health: 6
+      happiness: 4
+      wealth: -3
+      weight: -0.4      # 更好的減重效果
+      knowledge: 1      # 學會烹飪技巧
+    energy_cost: 10
+    
+  - name: "冥想修行"
+    description: "深度冥想和正念練習"
+    effects:
+      happiness: 10
+      health: 4
+      knowledge: 4
+      social: -1        # 減少社交時間
+    energy_cost: 5
+    
+  - name: "奢侈購物"
+    description: "買一些昂貴的東西犒賞自己"
+    effects:
+      happiness: 6
+      wealth: -8        # 花更多錢
+      social: 3
+      weight: 0.1
+    energy_cost: 8
+    
+  - name: "專業進修"
+    description: "參加高級技能培訓課程"
+    effects:
+      knowledge: 12     # 更大的知識提升
+      wealth: -3        # 課程費用
+      happiness: 3
+    energy_cost: 12
+
+# 遊戲設定 - 高級挑戰版
+game_settings:
+  # 角色初始數值 - 更具挑戰性
+  initial_stats:
+    weight: 85.0        # 更高的起始體重
+    health: 40          # 更低的起始健康
+    happiness: 40       # 更低的起始快樂
+    wealth: 40          # 更低的起始財富
+    knowledge: 30       # 更低的起始知識
+    social: 30          # 更低的起始社交
+  
+  # 遊戲目標 - 更困難
+  target_weight: 60.0   # 更低的目標體重
+  max_days: 80          # 更短的時間限制
+  
+  # 失敗條件閾值 - 更嚴格
+  failure_thresholds:
+    health: 15          # 健康閾值提高
+    happiness: 15       # 快樂閾值提高
+  
+# 統計數值限制
+  stat_limits:
+    weight_min: 35.0    # 更低的最小體重
+    weight_max: 160.0   # 更高的最大體重
+    stat_min: 0
+    stat_max: 100
+
+# 隨機事件系統
+random_events:
+  # 事件觸發機率 (0.0-1.0)
+  probability: 0.3
+  
+  # 隨機事件列表
+  events:
+    - name: "下雨天憂鬱"
+      description: "下雨了，心情有點憂鬱"
+      effects:
+        happiness: -2
+      weight: 10          # 事件權重，數字越大越容易發生
+      
+    - name: "朋友鼓勵"
+      description: "收到朋友的鼓勵訊息！"
+      effects:
+        happiness: 3
+        social: 2
+      weight: 15
+      
+    - name: "意外收穫"
+      description: "路上撿到零錢"
+      effects:
+        wealth: 2
+        happiness: 1
+      weight: 5
+      
+    - name: "勵志內容"
+      description: "看到勵志影片"
+      effects:
+        happiness: 2
+        knowledge: 1
+      weight: 12
+      
+    - name: "輕微感冒"
+      description: "感冒了一點"
+      effects:
+        health: -3
+      weight: 8
+      
+    - name: "優質睡眠"
+      description: "睡得很好"
+      effects:
+        health: 3
+        happiness: 2
+      weight: 15
+      
+    - name: "交通堵塞"
+      description: "遇到嚴重塞車，心情煩躁"
+      effects:
+        happiness: -3
+      weight: 12
+      
+    - name: "美食誘惑"
+      description: "看到美味甜點，忍不住吃了一些"
+      effects:
+        weight: 0.2
+        happiness: 3
+      weight: 10
+      
+    - name: "工作順利"
+      description: "工作上有了突破性進展"
+      effects:
+        happiness: 4
+        wealth: 3
+        knowledge: 2
+      weight: 8
+      
+    - name: "舊友重逢"
+      description: "偶遇多年未見的老朋友"
+      effects:
+        happiness: 5
+        social: 4
+      weight: 6
+
+# 條件事件系統（基於當前狀態觸發）
+conditional_events:
+  # 低健康狀態事件
+  - condition:
+      stat: "health"
+      operator: "<"
+      value: 20
+    event:
+      name: "疲倦狀態"
+      description: "因為健康狀況不佳，今天感到很疲倦..."
+      effects:
+        happiness: -5
+    probability: 0.8
+    
+  # 低快樂狀態事件
+  - condition:
+      stat: "happiness"
+      operator: "<"
+      value: 20
+    event:
+      name: "情緒低落"
+      description: "心情很低落，做什麼都提不起勁..."
+      effects:
+        health: -3
+    probability: 0.7
+    
+  # 低財富狀態事件
+  - condition:
+      stat: "wealth"
+      operator: "<"
+      value: 20
+    event:
+      name: "經濟壓力"
+      description: "錢包空空如也，有點擔心生活費..."
+      effects:
+        happiness: -3
+    probability: 0.6
+    
+  # 高社交狀態事件
+  - condition:
+      stat: "social"
+      operator: ">"
+      value: 80
+    event:
+      name: "朋友關懷"
+      description: "朋友們都很關心你的近況，感覺很溫暖！"
+      effects:
+        happiness: 3
+    probability: 0.5
+    
+  # 高知識狀態事件
+  - condition:
+      stat: "knowledge"
+      operator: ">"
+      value: 80
+    event:
+      name: "知識應用"
+      description: "學到了很多新知識，工作表現更好了！"
+      effects:
+        wealth: 5
+    probability: 0.4

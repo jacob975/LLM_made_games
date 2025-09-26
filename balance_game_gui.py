@@ -10,6 +10,8 @@ from tkinter import ttk, messagebox, simpledialog
 import json
 import os
 import random
+import yaml
+from pathlib import Path
 from typing import Dict, List, Tuple, Optional
 import threading
 import time
@@ -508,15 +510,16 @@ class BalanceGameGUI:
         if not name.strip():
             name = "減肥勇者"
         
-        # 創建新角色
-        self.character = Character(name.strip())
+        # 使用配置創建新角色
+        game_settings = self.game_logic.config.get('game_settings', {})
+        self.character = Character(name.strip(), game_settings)
         self.game_logic.character = self.character
         
         # 更新界面
         self.update_display()
         
         # 歡迎訊息
-        welcome_msg = f"歡迎 {name}！\n目標：從 {self.character.initial_weight}kg 減重到 {self.character.target_weight}kg\n每天選擇一個行動，在100天內達成減肥目標！"
+        welcome_msg = f"歡迎 {name}！\n目標：從 {self.character.initial_weight}kg 減重到 {self.character.target_weight}kg\n每天選擇一個行動，在{self.character.max_days}天內達成減肥目標！"
         self.add_log(welcome_msg)
         
         messagebox.showinfo(

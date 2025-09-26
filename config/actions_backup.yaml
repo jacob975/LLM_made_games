@@ -1,0 +1,118 @@
+# 減肥平衡遊戲 - 高級挑戰配置
+# 這是一個更具挑戰性的配置示例
+
+# 行動列表 - 高級挑戰版
+actions:
+  - name: "高強度運動"
+    description: "HIIT高強度間歇訓練"
+    effects:
+      weight: -0.8      # 更好的減重效果
+      health: 10        # 更高的健康增益
+      happiness: -5     # 更累，快樂下降更多
+    energy_cost: 20
+    
+  - name: "瑜伽"
+    description: "練習哈他瑜伽1小時"
+    effects:
+      weight: -0.2
+      health: 6
+      happiness: 4
+      knowledge: 1      # 身心靈提升
+    energy_cost: 8
+    
+  - name: "營養學習"
+    description: "學習營養知識和健康飲食"
+    effects:
+      knowledge: 10
+      health: 2
+      happiness: 2
+    energy_cost: 6
+    
+  - name: "加班工作"
+    description: "為了賺更多錢而加班"
+    effects:
+      wealth: 12        # 更多收入
+      health: -6        # 更大健康損害
+      happiness: -4     # 更累更不開心
+      weight: 0.3       # 久坐+外食
+    energy_cost: 18
+    
+  - name: "社交聚餐"
+    description: "和朋友一起享用大餐"
+    effects:
+      social: 10
+      happiness: 8
+      wealth: -5
+      weight: 0.5       # 大餐增重更多
+    energy_cost: 5
+    
+  - name: "深度休息"
+    description: "完全放鬆，睡個好覺"
+    effects:
+      happiness: 8
+      health: 5
+      knowledge: -2
+    energy_cost: 0
+    
+  - name: "健康烹飪"
+    description: "精心準備低卡營養餐"
+    effects:
+      health: 6
+      happiness: 4
+      wealth: -3
+      weight: -0.4      # 更好的減重效果
+      knowledge: 1      # 學會烹飪技巧
+    energy_cost: 10
+    
+  - name: "冥想修行"
+    description: "深度冥想和正念練習"
+    effects:
+      happiness: 10
+      health: 4
+      knowledge: 4
+      social: -1        # 減少社交時間
+    energy_cost: 5
+    
+  - name: "奢侈購物"
+    description: "買一些昂貴的東西犒賞自己"
+    effects:
+      happiness: 6
+      wealth: -8        # 花更多錢
+      social: 3
+      weight: 0.1
+    energy_cost: 8
+    
+  - name: "專業進修"
+    description: "參加高級技能培訓課程"
+    effects:
+      knowledge: 12     # 更大的知識提升
+      wealth: -3        # 課程費用
+      happiness: 3
+    energy_cost: 12
+
+# 遊戲設定 - 高級挑戰版
+game_settings:
+  # 角色初始數值 - 更具挑戰性
+  initial_stats:
+    weight: 85.0        # 更高的起始體重
+    health: 40          # 更低的起始健康
+    happiness: 40       # 更低的起始快樂
+    wealth: 40          # 更低的起始財富
+    knowledge: 30       # 更低的起始知識
+    social: 30          # 更低的起始社交
+  
+  # 遊戲目標 - 更困難
+  target_weight: 60.0   # 更低的目標體重
+  max_days: 80          # 更短的時間限制
+  
+  # 失敗條件閾值 - 更嚴格
+  failure_thresholds:
+    health: 15          # 健康閾值提高
+    happiness: 15       # 快樂閾值提高
+  
+  # 統計數值限制
+  stat_limits:
+    weight_min: 35.0    # 更低的最小體重
+    weight_max: 160.0   # 更高的最大體重
+    stat_min: 0
+    stat_max: 100
