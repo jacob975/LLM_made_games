@@ -1,0 +1,65 @@
+{
+  "title": "超神肥廣告劇本",
+  "version": "1.0",
+  "description": "超神肥產品廣告的完整劇本，包含旁白、農夫、農婦、專家和合唱的對話",
+  "dialogues": [
+    {
+      "id": 1,
+      "character_id": "narrator",
+      "character_name": "旁白",
+      "text": "用了超神肥，收成笑呵呵！",
+      "type": "narration",
+      "mood": "cheerful",
+      "emphasis": "normal"
+    },
+    {
+      "id": 2,
+      "character_id": "farmer_a",
+      "character_name": "農夫甲",
+      "text": "以前施肥三天累到爆，現在只要撒一把，莊稼自己會Rap！",
+      "type": "dialogue",
+      "mood": "excited",
+      "emphasis": "strong"
+    },
+    {
+      "id": 3,
+      "character_id": "farmer_b",
+      "character_name": "農婦乙",
+      "text": "鄰居看到我家玉米長得比她高三倍，還以為我偷偷養了巨人！",
+      "type": "dialogue",
+      "mood": "proud",
+      "emphasis": "normal"
+    },
+    {
+      "id": 4,
+      "character_id": "expert",
+      "character_name": "專家",
+      "text": "超神肥內含九十九種神秘元素，能讓土壤自帶Wi-Fi，連稻田都能上網！",
+      "type": "dialogue",
+      "mood": "authoritative",
+      "emphasis": "technical"
+    },
+    {
+      "id": 5,
+      "character_id": "chorus",
+      "character_name": "合唱",
+      "text": "超神肥！超神肥！越用越神奇！",
+      "type": "chorus",
+      "mood": "celebratory",
+      "emphasis": "strong"
+    }
+  ],
+  "meta": {
+    "total_dialogues": 5,
+    "characters_count": 5,
+    "estimated_duration_seconds": 20,
+    "created_date": "2025-09-27",
+    "converted_from": "script.txt",
+    "tags": [
+      "advertisement",
+      "comedy",
+      "agriculture",
+      "product-demo"
+    ]
+  }
+}

@@ -1,0 +1,178 @@
+{
+  "version": "1.0",
+  "description": "超神肥文字冒險遊戲角色配置文件",
+  "characters": {
+    "narrator": {
+      "id": "narrator",
+      "name": "旁白",
+      "display_name": "旁白",
+      "emoji": "🎵",
+      "color": {
+        "r": 70,
+        "g": 130,
+        "b": 180,
+        "hex": "#4682B4"
+      },
+      "description": "故事敘述者，負責引導劇情和廣告宣傳",
+      "personality": [
+        "enthusiastic",
+        "persuasive",
+        "energetic"
+      ],
+      "voice_style": "narrator",
+      "animation_style": "pulse",
+      "scale": 1.0,
+      "position_preference": "center"
+    },
+    "farmer_a": {
+      "id": "farmer_a",
+      "name": "農夫甲",
+      "display_name": "農夫甲",
+      "emoji": "👨‍🌾",
+      "color": {
+        "r": 34,
+        "g": 139,
+        "b": 34,
+        "hex": "#228B22"
+      },
+      "description": "經驗豐富的農夫，超神肥的使用者和見證人",
+      "personality": [
+        "hardworking",
+        "honest",
+        "enthusiastic"
+      ],
+      "voice_style": "rustic",
+      "animation_style": "bounce",
+      "scale": 1.0,
+      "position_preference": "left"
+    },
+    "farmer_b": {
+      "id": "farmer_b",
+      "name": "農婦乙",
+      "display_name": "農婦乙",
+      "emoji": "👩‍🌾",
+      "color": {
+        "r": 178,
+        "g": 34,
+        "b": 34,
+        "hex": "#B22222"
+      },
+      "description": "聰明的農婦，善於觀察和比較效果",
+      "personality": [
+        "observant",
+        "clever",
+        "competitive"
+      ],
+      "voice_style": "warm",
+      "animation_style": "sway",
+      "scale": 1.0,
+      "position_preference": "right"
+    },
+    "expert": {
+      "id": "expert",
+      "name": "專家",
+      "display_name": "專家",
+      "emoji": "👴",
+      "color": {
+        "r": 148,
+        "g": 0,
+        "b": 211,
+        "hex": "#9400D3"
+      },
+      "description": "農業專家，提供專業和科學的解釋",
+      "personality": [
+        "knowledgeable",
+        "authoritative",
+        "scientific"
+      ],
+      "voice_style": "professional",
+      "animation_style": "steady",
+      "scale": 1.1,
+      "position_preference": "center-left"
+    },
+    "chorus": {
+      "id": "chorus",
+      "name": "合唱",
+      "display_name": "合唱",
+      "emoji": "🎵",
+      "color": {
+        "r": 255,
+        "g": 215,
+        "b": 0,
+        "hex": "#FFD700"
+      },
+      "description": "群眾合唱，代表大眾的聲音和認同",
+      "personality": [
+        "collective",
+        "celebratory",
+        "unified"
+      ],
+      "voice_style": "chorus",
+      "animation_style": "vibrate",
+      "scale": 1.2,
+      "position_preference": "center"
+    }
+  },
+  "character_groups": {
+    "farmers": [
+      "farmer_a",
+      "farmer_b"
+    ],
+    "authority_figures": [
+      "expert"
+    ],
+    "narrators": [
+      "narrator",
+      "chorus"
+    ],
+    "main_speakers": [
+      "farmer_a",
+      "farmer_b",
+      "expert"
+    ],
+    "background_voices": [
+      "chorus"
+    ]
+  },
+  "animation_settings": {
+    "pulse": {
+      "speed": 2.0,
+      "intensity": 0.05,
+      "type": "sine_wave"
+    },
+    "bounce": {
+      "speed": 1.5,
+      "intensity": 0.08,
+      "type": "bounce_ease"
+    },
+    "sway": {
+      "speed": 1.0,
+      "intensity": 0.03,
+      "type": "smooth_wave"
+    },
+    "steady": {
+      "speed": 0.5,
+      "intensity": 0.02,
+      "type": "gentle_pulse"
+    },
+    "vibrate": {
+      "speed": 3.0,
+      "intensity": 0.1,
+      "type": "rapid_shake"
+    }
+  },
+  "display_settings": {
+    "default_font_size": 18,
+    "name_font_size": 20,
+    "emoji_font_size": 48,
+    "character_radius": 45,
+    "highlight_thickness": 3,
+    "speaking_scale_multiplier": 1.1
+  },
+  "meta": {
+    "total_characters": 5,
+    "created_date": "2025-09-27",
+    "last_modified": "2025-09-27",
+    "version_notes": "Initial character configuration for 超神肥 text adventure game"
+  }
+}
