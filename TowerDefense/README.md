@@ -111,7 +111,3 @@ The game follows OOP principles with clear separation of concerns:
 - `Game` classes manage game logic (map, waves, UI)  
 - `Utils` provide reusable mathematical operations
 - `Config` centralizes game constants and settings
-
-## License
-
-This project is open source and available under the MIT License.

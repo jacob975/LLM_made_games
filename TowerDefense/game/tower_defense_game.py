@@ -110,8 +110,8 @@ class TowerDefenseGame:
         ui_action = self.ui.handle_click(pos)
         
         if ui_action:
-            if ui_action.startswith("select_tower_"):
-                tower_type = ui_action.split("_")[-1]
+            if ui_action.startswith("select_tower/?"):
+                tower_type = ui_action.split("towerid=")[-1]
                 self.selected_tower_type = tower_type
                 self.ui.selected_tower_type = tower_type
             

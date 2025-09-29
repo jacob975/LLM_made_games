@@ -21,15 +21,15 @@ class UI:
         
         # Tower buttons
         self.tower_buttons = {
-            "basic": pygame.Rect(SCREEN_WIDTH - 180, 100, 80, 40),
-            "sniper": pygame.Rect(SCREEN_WIDTH - 90, 100, 80, 40),
-            "machine_gun": pygame.Rect(SCREEN_WIDTH - 180, 150, 80, 40),
-            "cannon": pygame.Rect(SCREEN_WIDTH - 90, 150, 80, 40),
+            "basic": pygame.Rect(SCREEN_WIDTH - 180, 150, 80, 40),
+            "sniper": pygame.Rect(SCREEN_WIDTH - 90, 150, 80, 40),
+            "machine_gun": pygame.Rect(SCREEN_WIDTH - 180, 200, 80, 40),
+            "cannon": pygame.Rect(SCREEN_WIDTH - 90, 200, 80, 40),
         }
         
         # Control buttons
-        self.start_wave_button = pygame.Rect(SCREEN_WIDTH - 180, 300, 160, 40)
-        self.pause_button = pygame.Rect(SCREEN_WIDTH - 180, 350, 160, 40)
+        self.start_wave_button = pygame.Rect(SCREEN_WIDTH - 180, 350, 160, 40)
+        self.pause_button = pygame.Rect(SCREEN_WIDTH - 180, 400, 160, 40)
         
         self.selected_tower_type = "basic"
         
@@ -47,7 +47,7 @@ class UI:
         for tower_type, button_rect in self.tower_buttons.items():
             if button_rect.collidepoint(pos):
                 self.selected_tower_type = tower_type
-                return f"select_tower_{tower_type}"
+                return f"select_tower/?towerid={tower_type}"
         
         # Check control buttons
         if self.start_wave_button.collidepoint(pos):
@@ -66,28 +66,29 @@ class UI:
         
         # Draw game stats
         y_offset = 20
+        panel_left = self.panel_rect.x + 10
         
         # Money
         money_text = self.font_medium.render(f"Money: ${game_state.get('money', 0)}", 
                                            True, BLACK)
-        screen.blit(money_text, (SCREEN_WIDTH - 190, y_offset))
+        screen.blit(money_text, (panel_left, y_offset))
         y_offset += 30
         
         # Lives
         lives_text = self.font_medium.render(f"Lives: {game_state.get('lives', 0)}", 
                                            True, BLACK)
-        screen.blit(lives_text, (SCREEN_WIDTH - 190, y_offset))
+        screen.blit(lives_text, (panel_left, y_offset))
         y_offset += 30
         
         # Wave info
         wave_text = self.font_medium.render(f"Wave: {game_state.get('wave', 1)}", 
                                           True, BLACK)
-        screen.blit(wave_text, (SCREEN_WIDTH - 190, y_offset))
+        screen.blit(wave_text, (panel_left, y_offset))
         y_offset += 40
         
         # Tower selection title
         title_text = self.font_medium.render("Select Tower:", True, BLACK)
-        screen.blit(title_text, (SCREEN_WIDTH - 190, y_offset))
+        screen.blit(title_text, (panel_left, y_offset))
         y_offset += 30
         
         # Draw tower buttons
@@ -111,22 +112,25 @@ class UI:
             screen.blit(cost_text, cost_rect)
         
         # Tower stats for selected tower
-        y_offset = 200
-        selected_info = self.tower_info[self.selected_tower_type]
+        button_bottom = max(rect.bottom for rect in self.tower_buttons.values())
+        y_offset = button_bottom + 20
+        selected_type = self.selected_tower_type if self.selected_tower_type in self.tower_info else next(iter(self.tower_info))
+        self.selected_tower_type = selected_type
+        selected_info = self.tower_info[selected_type]
         stats_title = self.font_small.render("Tower Stats:", True, BLACK)
-        screen.blit(stats_title, (SCREEN_WIDTH - 190, y_offset))
+        screen.blit(stats_title, (panel_left, y_offset))
         y_offset += 20
         
         damage_text = self.font_small.render(f"Damage: {selected_info['damage']}", True, BLACK)
-        screen.blit(damage_text, (SCREEN_WIDTH - 190, y_offset))
+        screen.blit(damage_text, (panel_left, y_offset))
         y_offset += 15
         
         range_text = self.font_small.render(f"Range: {selected_info['range']}", True, BLACK)
-        screen.blit(range_text, (SCREEN_WIDTH - 190, y_offset))
+        screen.blit(range_text, (panel_left, y_offset))
         y_offset += 15
         
         cost_text = self.font_small.render(f"Cost: ${selected_info['cost']}", True, BLACK)
-        screen.blit(cost_text, (SCREEN_WIDTH - 190, y_offset))
+        screen.blit(cost_text, (panel_left, y_offset))
         
         # Control buttons
         # Start wave button

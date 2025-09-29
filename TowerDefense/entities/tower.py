@@ -6,6 +6,7 @@ import pygame
 import math
 from utils.vector2d import Vector2D
 from config import *
+from .enemy import Enemy
 
 class Projectile:
     """Projectile fired by towers"""
@@ -85,7 +86,7 @@ class Tower:
         """Check if tower can attack"""
         return frame_count - self.last_attack >= self.attack_rate
     
-    def find_target(self, enemies):
+    def find_target(self, enemies:Enemy):
         """Find the best target among enemies in range"""
         targets_in_range = []
         
