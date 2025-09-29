@@ -1,2 +1,2 @@
-/.conda
-/__pycache__
+.conda/
+__pycache__/
